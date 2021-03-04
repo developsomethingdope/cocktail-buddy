@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import NavLinks from "../components/NavLinks";
 import CocktailList from "../components/CocktailList";
 //// global states
+//// state persists until browser refresh
 import { useGlobalContext } from "../Context";
 import BackToTop from "../components/BackToTop";
 
@@ -37,7 +38,7 @@ function HomePage()
         isFavorite: isFavoriteLocal
       };
     });
-    //console.log(newCocktailList[0]);
+    //console.log('home page: ', newCocktailList[0]);
     const cocktailItem = newCocktailList[0];
     list.push(cocktailItem);
     return list;
@@ -56,12 +57,12 @@ function HomePage()
         const dataJson = await response.json();
         newCocktailList = addDataToList(dataJson, newCocktailList);
       }
-      //console.log(newCocktailList);
+      //console.log('home page: ', newCocktailList);
       setRandomCocktailsArray(newCocktailList);
     }
     catch(error)
     {
-      console.log(error);
+      console.log('home page: ', error);
     }
     setIsLoading(false);
   };

@@ -4,7 +4,7 @@ import { useGlobalContext } from "../Context";
 //import placeholderImage from "../placeholder.png";
 
 //// destructuring
-function CocktailItem({ id, name, image, isFavorite }) 
+function CocktailItem({ id, name, image, isFavorite })
 {
   const [isFavoriteLocal, setIsFavoriteLocal] = useState(isFavorite);
   const { isLinkToDetail, favoriteIdsArray, setFavoriteIdsArray, randomCocktailsArray, setRandomCocktailsArray, setIsIdsArrayChanged } = useGlobalContext();

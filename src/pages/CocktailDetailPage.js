@@ -19,6 +19,22 @@ function CocktailDetailPage()
     //console.log('cocatail detail: ', drinks);
     const newCocktailList = drinks.map((drinkItem) => 
     {
+      let ingredientsString = '';
+      for (const [key, value] of Object.entries(drinkItem))
+      {
+        if (key.includes("strIngredient") && value)
+        {
+          if (!ingredientsString)
+          {
+            ingredientsString = value;
+          }
+          else
+          {
+            ingredientsString = ingredientsString + ', ' + value;
+          }
+        }
+      }
+      
       const { idDrink, strDrink, strDrinkThumb, strAlcoholic, strGlass, strCategory, strInstructions } = drinkItem;
       let isFavoriteLocal = false;
       for (const idItem of favoriteIdsArray)
@@ -36,6 +52,7 @@ function CocktailDetailPage()
         glass: strGlass,
         category: strCategory,
         instructions: strInstructions,
+        ingredients: ingredientsString,
         image: strDrinkThumb,
         isFavorite: isFavoriteLocal
       };
@@ -97,6 +114,10 @@ function CocktailDetailPage()
               <div className="info-area">
                 <div className="info-label label-glass">Glass:</div>
                 <div className="info-text text-glass">{ detailItem.glass }</div>
+              </div>
+              <div className="info-area">
+                <div className="info-label label-ingredients">Ingredients:</div>
+                <div className="info-text text-ingredients">{ detailItem.ingredients }</div>
               </div>
               <div className="info-area">
                 <div className="info-label label-instructions">Instructions:</div>
