@@ -17,7 +17,7 @@ function AboutPage()
         <div className="title">About</div>
       </div>
       <div className={ isFavoriteAbout ? "page-bottom section-about section-about-favorite" : "page-bottom section-about" }>
-        <div className="section-subtitle">Cocktail-Buddy v1.2</div>
+        <div className="section-subtitle">Cocktail-Buddy v1.3</div>
         <div className="about-favorite">
           <div className="favorite-toggle">
             { !isFavoriteAbout && <div className="toggle-label">Not Favorite</div> }
@@ -39,6 +39,7 @@ function AboutPage()
         </ul>
         <p>
           Source: <a href="https://github.com/developsomethingdope/cocktail-buddy">GitHub</a><br />
+		  See more: <a href="https://develop-something-dope.netlify.app">My Porfolio website</a><br />
           About me: <a href="https://www.linkedin.com/in/edward-kwong-03a783184">Linkedin</a><br /><br />
           Copyright &copy; { (new Date()).getFullYear() }
         </p>
