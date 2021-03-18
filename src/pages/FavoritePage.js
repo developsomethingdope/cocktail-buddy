@@ -7,25 +7,22 @@ import BackToTop from "../components/BackToTop";
 function FavoritePage() 
 {
   const url = 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=';
-  const { setIsLoading, setIsLinkToDetail, favoriteIdsArray, favoriteCocktailsArray, setFavoriteCocktailsArray, isIdsArrayChanged, setIsIdsArrayChanged } = useGlobalContext();
-  //console.log('favorite page: ', isIdsArrayChanged);
+  const { setIsLoading, setIsLinkToDetail, favoriteIdsArray, favoriteCocktailsArray, setFavoriteCocktailsArray, isIdsArrayChanged, setIsIdsArrayChanged, isUpdateFavoriteCocktailsArray, setIsUpdateFavoriteCocktailsArray } = useGlobalContext();
+  //console.log('favorite page: drink: ', favoriteCocktailsArray);
+  //console.log('favorite page: id: ', favoriteIdsArray);
 
-  function addDataToList(data, list)
+  function addDataToList(drinkItem, list)
   {
-    const { drinks } = data;
-    const newCocktailList = drinks.map((drinkItem) => 
+    const { idDrink, strDrink, strDrinkThumb, strAlcoholic, strGlass } = drinkItem;
+    const cocktailItem = 
     {
-      const { idDrink, strDrink, strDrinkThumb, strAlcoholic, strGlass } = drinkItem;
-      return {
-        id: idDrink,
-        name: strDrink,
-        type: strAlcoholic,
-        glass: strGlass,
-        image: strDrinkThumb,
-        isFavorite: true
-      };
-    });
-    const cocktailItem = newCocktailList[0];
+      id: idDrink,
+      name: strDrink,
+      type: strAlcoholic,
+      glass: strGlass,
+      image: strDrinkThumb,
+      isFavorite: true
+    };
     list.push(cocktailItem);
     return list;
   }
@@ -41,7 +38,7 @@ function FavoritePage()
         const completeUrl = `${url}${idItem}`;
         const response = await fetch(completeUrl);
         const dataJson = await response.json();
-        newCocktailList = addDataToList(dataJson, newCocktailList);
+        newCocktailList = addDataToList(dataJson['drinks'][0], newCocktailList);
       }
       //console.log(newCocktailList);
       setFavoriteCocktailsArray(newCocktailList);
@@ -56,10 +53,11 @@ function FavoritePage()
   useEffect(() => 
   {
     //// for initial render
-    if (favoriteIdsArray.length > 0 && isIdsArrayChanged)
+    if (isUpdateFavoriteCocktailsArray || (favoriteIdsArray.length > 0 && isIdsArrayChanged))
     {
       fetchDataFavorite(favoriteIdsArray);
       setIsIdsArrayChanged(false);
+      setIsUpdateFavoriteCocktailsArray(false);
     }
     setIsLinkToDetail(true);
   }, []);
@@ -71,14 +69,14 @@ function FavoritePage()
         <div className="title">Favorite cocktails</div>
       </div>
       {
-        favoriteIdsArray.length < 1 &&
+        favoriteCocktailsArray.length < 1 &&
         <div className="page-bottom section-favorite section-favorite-none">
           <div className="section-subtitle">None found</div>
           <p>Just click on Home and pick some cocktails.</p>
         </div>
       }
       {
-        favoriteIdsArray.length > 0 &&
+        favoriteCocktailsArray.length > 0 &&
         <div className="page-bottom section-favorite">
           <CocktailList componentCocktailsArray={favoriteCocktailsArray} />
           <BackToTop />

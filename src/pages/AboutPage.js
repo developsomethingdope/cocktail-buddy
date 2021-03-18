@@ -17,7 +17,7 @@ function AboutPage()
         <div className="title">About</div>
       </div>
       <div className={ isFavoriteAbout ? "page-bottom section-about section-about-favorite" : "page-bottom section-about" }>
-        <div className="section-subtitle">Cocktail-Buddy v1.4</div>
+        <div className="section-subtitle">Cocktail-Buddy v1.5</div>
         <div className="about-favorite">
           <div className="favorite-toggle">
             { !isFavoriteAbout && <div className="toggle-label">Not Favorite</div> }

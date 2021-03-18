@@ -13,9 +13,10 @@ function AppProvider({children})
   const [favoriteCocktailsArray, setFavoriteCocktailsArray] = useState([]);
   const [isIdsArrayChanged, setIsIdsArrayChanged] = useState(true);
   const [isFavoriteAbout, setIsFavoriteAbout] = useState(false);
+  const [isUpdateFavoriteCocktailsArray, setIsUpdateFavoriteCocktailsArray] = useState(false);
 
   return (
-    <AppContext.Provider value={ {isLoading, setIsLoading, randomCocktailsArray, setRandomCocktailsArray, isLinkToDetail, setIsLinkToDetail, favoriteIdsArray, setFavoriteIdsArray, favoriteCocktailsArray, setFavoriteCocktailsArray, isIdsArrayChanged, setIsIdsArrayChanged, isFavoriteAbout, setIsFavoriteAbout} }>
+    <AppContext.Provider value={ {isLoading, setIsLoading, randomCocktailsArray, setRandomCocktailsArray, isLinkToDetail, setIsLinkToDetail, favoriteIdsArray, setFavoriteIdsArray, favoriteCocktailsArray, setFavoriteCocktailsArray, isIdsArrayChanged, setIsIdsArrayChanged, isFavoriteAbout, setIsFavoriteAbout, isUpdateFavoriteCocktailsArray, setIsUpdateFavoriteCocktailsArray} }>
       { children }
     </AppContext.Provider>
   );

@@ -15,31 +15,26 @@ function HomePage()
   const numOfRandomCocktails = 4;
   //console.log('home page:', favoriteIdsArray);
 
-  function addDataToList(data, list)
+  function addDataToList(drinkItem, list)
   {
-    const { drinks } = data;
-    //console.log('home page: ', drinks);
-    const newCocktailList = drinks.map((drinkItem) => 
+    const { idDrink, strDrink, strDrinkThumb } = drinkItem;
+    let isFavoriteLocal = false;
+    for (const idItem of favoriteIdsArray)
     {
-      const { idDrink, strDrink, strDrinkThumb } = drinkItem;
-      let isFavoriteLocal = false;
-      for (const idItem of favoriteIdsArray)
+      if (idItem === idDrink)
       {
-        if (idItem === idDrink)
-        {
-          isFavoriteLocal = true;
-          break;
-        }
+        isFavoriteLocal = true;
+        break;
       }
-      return {
-        id: idDrink,
-        name: strDrink,
-        image: strDrinkThumb,
-        isFavorite: isFavoriteLocal
-      };
-    });
-    //console.log('home page: ', newCocktailList[0]);
-    const cocktailItem = newCocktailList[0];
+    }
+    const cocktailItem = 
+    {
+      id: idDrink,
+      name: strDrink,
+      image: strDrinkThumb,
+      isFavorite: isFavoriteLocal
+    };
+    //console.log('home page: ', cocktailItem);
     list.push(cocktailItem);
     return list;
   }
@@ -51,11 +46,22 @@ function HomePage()
     {
       //// clone array
       var newCocktailList = [...randomCocktailsArray];
+      var idsObject = {};
+      var idArrayTest = [];
       for (let i = 0; i < numOfRandomCocktails; i++)
       {
-        const response = await fetch(url);
-        const dataJson = await response.json();
-        newCocktailList = addDataToList(dataJson, newCocktailList);
+        var idLocal = '';
+        var dataJson = '';
+        do
+        {
+          const response = await fetch(url);
+          dataJson = await response.json();
+          idLocal = dataJson['drinks'][0]['idDrink'];
+        } while (idsObject[idLocal]);
+        idsObject[idLocal] = true;
+        idArrayTest.push(idLocal);
+        //console.log('home page: ', idArrayTest);
+        newCocktailList = addDataToList(dataJson['drinks'][0], newCocktailList);
       }
       //console.log('home page: ', newCocktailList);
       setRandomCocktailsArray(newCocktailList);
