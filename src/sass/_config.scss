@@ -1,0 +1,15 @@
+@font-face
+{
+    font-family: Roboto;
+    src: url('../fonts/Roboto/Roboto-Regular.ttf');
+}
+
+/* sass variable does not work in root */
+
+:root
+{
+  --main-purple: #a200ff;
+  --light-purple: #eee1f5;
+  --dark-purple: #8554a1;
+  --gradient-color: linear-gradient(90deg, #fff, #eee1f5);
+}
