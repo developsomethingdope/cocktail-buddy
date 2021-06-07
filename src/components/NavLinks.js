@@ -7,15 +7,7 @@ function NavLinks({ linkType })
   
   function getLinks(type)
   {
-    if (type === "homeLink")
-    {
-      return (
-        <div>
-          <Link to="/">Home</Link> | <Link to="/about">About</Link>
-        </div>
-      );
-    }
-    if (type === "favoriteLink")
+    if (type === "NO_HOME_LINK")
     {
       return (
         <div>
@@ -23,7 +15,15 @@ function NavLinks({ linkType })
         </div>
       );
     }
-    if (type === "noAboutLink")
+    if (type === "NO_FAVORITE_LINK")
+    {
+      return (
+        <div>
+          <Link to="/">Home</Link> | <Link to="/about">About</Link>
+        </div>
+      );
+    }
+    if (type === "NO_ABOUT_LINK")
     {
       return (
         <div>

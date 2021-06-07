@@ -5,7 +5,7 @@ function ErrorPage()
   return (
     <div>
       <div className="page-top">
-        <div className="links"><NavLinks linkType="homeLink" /></div>
+        <div className="links"><NavLinks linkType="NO_FAVORITE_LINK" /></div>
         <div className="title">Error</div>  
       </div>
       <div className="page-bottom section-error">

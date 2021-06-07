@@ -10,7 +10,7 @@ function CocktailDetailPage()
 {
   const url = 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=';
   const { id } = useParams();
-  const { isLoading, setIsLoading, favoriteIdsArray, setIsLinkToDetail } = useGlobalContext();
+  const { favoriteIdsArray, setIsLinkToDetail } = useGlobalContext();
   const [detailItem, setDetailItem] = useState({});
 
   function parseData(data)
@@ -63,7 +63,6 @@ function CocktailDetailPage()
   
   async function fetchDataDetail(idDetail)
   {
-    setIsLoading(true);
     try
     {
       const completeUrl = `${url}${idDetail}`;
@@ -76,7 +75,6 @@ function CocktailDetailPage()
     {
       console.log(error);
     }
-    setIsLoading(false);
   }
 
   useEffect(() => 
@@ -88,17 +86,17 @@ function CocktailDetailPage()
   return (
     <div>
       <div className="page-top">
-        <div className="links"><NavLinks linkType="allLink" /></div>
+        <div className="links"><NavLinks linkType="ALL_LINKS" /></div>
         <div className="title">Cocktail detail</div>
       </div>
       {
-        isLoading &&
+        !detailItem.id &&
         <div className="page-bottom section-detail">
           <Loading />
         </div>
       }
       {
-        !isLoading && detailItem &&
+        detailItem.id &&
         <div className="page-bottom section-detail">
           <div className="section-detail-content">
             <CocktailItem {...detailItem} />

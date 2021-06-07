@@ -4,17 +4,9 @@ import CocktailItem from "./CocktailItem";
 
 function CocktailList({ componentCocktailsArray }) 
 {
-  const { isLoading } = useGlobalContext();
-  
-  if (isLoading)
-  {
-    return <Loading />
-  }
   if (componentCocktailsArray.length < 1)
   {
-    return (
-      <div className="result-message">no cocktails found</div>
-    );
+    return <Loading />
   }
   //console.log(componentCocktailsArray);
   return (

@@ -9,7 +9,7 @@ import BackToTop from "../components/BackToTop";
 function HomePage() 
 {
   const url = 'https://www.thecocktaildb.com/api/json/v1/1/random.php';
-  const { isLoading, setIsLoading, randomCocktailsArray, setRandomCocktailsArray, setIsLinkToDetail, favoriteIdsArray } = useGlobalContext();
+  const { randomCocktailsArray, setRandomCocktailsArray, setIsLinkToDetail, favoriteIdsArray } = useGlobalContext();
   const [randomButtonClickCount, setRandomButtonClickCount] = useState(0);
   //// number of cocktails shown on the page
   const numOfRandomCocktails = 4;
@@ -41,13 +41,11 @@ function HomePage()
 
   async function fetchDataRandom()
   {
-    setIsLoading(true);
     try
     {
       //// clone array
       var newCocktailList = [...randomCocktailsArray];
       var idsObject = {};
-      var idArrayTest = [];
       for (let i = 0; i < numOfRandomCocktails; i++)
       {
         var idLocal = '';
@@ -59,8 +57,6 @@ function HomePage()
           idLocal = dataJson['drinks'][0]['idDrink'];
         } while (idsObject[idLocal]);
         idsObject[idLocal] = true;
-        idArrayTest.push(idLocal);
-        //console.log('home page: ', idArrayTest);
         newCocktailList = addDataToList(dataJson['drinks'][0], newCocktailList);
       }
       //console.log('home page: ', newCocktailList);
@@ -70,7 +66,6 @@ function HomePage()
     {
       console.log('home page: ', error);
     }
-    setIsLoading(false);
   };
 
   function showOnClickHandler()
@@ -97,12 +92,12 @@ function HomePage()
   return (
     <div>
       <div className="page-top">
-        <div className="links"><NavLinks linkType="favoriteLink" /></div>
+        <div className="links"><NavLinks linkType="NO_HOME_LINK" /></div>
         <div className="title">Random cocktails</div>
       </div>
       <div className="page-bottom section-home">
-        { !isLoading && <div className="button button-home" onClick={showOnClickHandler}>Show me new random cocktails</div> }
-        { isLoading && <div className="button button-home-disabled">Show me new random cocktails</div> }
+        { randomCocktailsArray.length < 1 && <div className="button button-home-disabled">Show me new random cocktails</div> }
+        { randomCocktailsArray.length > 0 && <div className="button button-home" onClick={showOnClickHandler}>Show me new random cocktails</div> }
         <CocktailList componentCocktailsArray={randomCocktailsArray} />
         <BackToTop />
       </div>

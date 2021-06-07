@@ -1,3 +1,11 @@
+/* component - nav links */
+
+.nav-links a
+{
+  text-decoration: none;
+  color: var(--main-purple);
+}
+
 /* component - cocktail list */
 
 .section-list
@@ -64,7 +72,7 @@
   margin-bottom: 5px;
 }
 
-/* component - cocktail item - back to top */
+/* component - back to top */
 
 .button-top
 {
@@ -75,7 +83,7 @@
   margin-top: 50px;
 }
 
-/* component - cocktail item - favorite toggle */
+/* favorite toggle */
 
 .toggle-switch
 {

@@ -7,7 +7,7 @@ import BackToTop from "../components/BackToTop";
 function FavoritePage() 
 {
   const url = 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=';
-  const { setIsLoading, setIsLinkToDetail, favoriteIdsArray, favoriteCocktailsArray, setFavoriteCocktailsArray, isIdsArrayChanged, setIsIdsArrayChanged, isUpdateFavoriteCocktailsArray, setIsUpdateFavoriteCocktailsArray } = useGlobalContext();
+  const { setIsLinkToDetail, favoriteIdsArray, favoriteCocktailsArray, setFavoriteCocktailsArray, isIdsArrayChanged, setIsIdsArrayChanged, isUpdateFavoriteCocktailsArray, setIsUpdateFavoriteCocktailsArray } = useGlobalContext();
   //console.log('favorite page: drink: ', favoriteCocktailsArray);
   //console.log('favorite page: id: ', favoriteIdsArray);
 
@@ -29,7 +29,6 @@ function FavoritePage()
 
   async function fetchDataFavorite(idArray)
   {
-    setIsLoading(true);
     try
     {
       var newCocktailList = [];
@@ -47,7 +46,6 @@ function FavoritePage()
     {
       console.log(error);
     }
-    setIsLoading(false);
   }
   
   useEffect(() => 
@@ -65,7 +63,7 @@ function FavoritePage()
   return (
     <div>
       <div className="page-top">
-        <div className="links"><NavLinks linkType="homeLink" /></div>
+        <div className="links"><NavLinks linkType="NO_FAVORITE_LINK" /></div>
         <div className="title">Favorite cocktails</div>
       </div>
       {
