@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
-import { useGlobalContext } from "../Context";
+import { useSelector, useDispatch } from "react-redux";
+import { setIsUpdateFavoriteCocktailsArray } from "../redux/SliceGeneral";
 
 function NavLinks({ linkType }) 
 {
-  const { favoriteIdsArray, favoriteCocktailsArray, setIsUpdateFavoriteCocktailsArray } = useGlobalContext();
+  const { favoriteIdsArray, favoriteCocktailsArray } = useSelector((state) => state.page);
+  const reduxDispatch = useDispatch();
   
   function getLinks(type)
   {
@@ -42,7 +44,7 @@ function NavLinks({ linkType })
   {
     if (favoriteIdsArray.length === 0 && favoriteCocktailsArray.length > 0)
     {
-      setIsUpdateFavoriteCocktailsArray(true);
+      reduxDispatch(setIsUpdateFavoriteCocktailsArray(true));
     }
   }
   

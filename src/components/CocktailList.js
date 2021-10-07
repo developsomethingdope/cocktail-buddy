@@ -1,4 +1,3 @@
-import { useGlobalContext } from "../Context";
 import Loading from "./Loading";
 import CocktailItem from "./CocktailItem";
 

@@ -1,15 +1,18 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useGlobalContext } from "../Context";
+import { useSelector, useDispatch } from "react-redux";
+import { setRandomCocktailsArray, setFavoriteIdsArray } from "../redux/SlicePage";
+import { setIsIdsArrayChanged } from "../redux/SliceGeneral";
 //import placeholderImage from "../placeholder.png";
 
 //// destructuring
 function CocktailItem({ id, name, image, isFavorite })
 {
   const [isFavoriteLocal, setIsFavoriteLocal] = useState(isFavorite);
-  const { isLinkToDetail, favoriteIdsArray, setFavoriteIdsArray, randomCocktailsArray, setRandomCocktailsArray, setIsIdsArrayChanged } = useGlobalContext();
+  const { isLinkToDetail } = useSelector((state) => state.general);
+  const { randomCocktailsArray, local_storage_key, favoriteIdsArray } = useSelector((state) => state.page);
+  const reduxDispatch = useDispatch();
   let localStorageIdArray = [...favoriteIdsArray];
-  const local_storage_key = 'cocktail-buddy-app-id-array';
   
   function toggleOnChangeHandler()
   {
@@ -24,20 +27,32 @@ function CocktailItem({ id, name, image, isFavorite })
       localStorageIdArray.push(id);
     }
 
-    const newRandomArray = [...randomCocktailsArray];
-    for (const randomItem of newRandomArray)
+    //// randomCocktailsArray is apparently read-only in redux
+    var newRandomArray = [];
+    const randomArrayLocal = [...randomCocktailsArray];
+    for (const randomItem of randomArrayLocal)
     {
       if (randomItem.id === id)
       {
-        randomItem.isFavorite = !isFavoriteLocal
-        break;
+        const newRandomItem = 
+        {
+          id: randomItem.id,
+          name: randomItem.name,
+          image: randomItem.image,
+          isFavorite: !isFavoriteLocal
+        }
+        newRandomArray.push(newRandomItem);
+      }
+      else
+      {
+        newRandomArray.push(randomItem);
       }
     }
-    setRandomCocktailsArray(newRandomArray);
+    reduxDispatch(setRandomCocktailsArray(newRandomArray));
     localStorage.setItem(local_storage_key, JSON.stringify(localStorageIdArray));
-    setFavoriteIdsArray(localStorageIdArray);
+    reduxDispatch(setFavoriteIdsArray(localStorageIdArray));
     setIsFavoriteLocal(!isFavoriteLocal);
-    setIsIdsArrayChanged(true);
+    reduxDispatch(setIsIdsArrayChanged(true));
   }
 
   // <Link to={ `/cocktail/${id}` }>

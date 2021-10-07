@@ -1,17 +1,35 @@
 import { useEffect, useState } from "react";
 import NavLinks from "../components/NavLinks";
 import { useParams } from "react-router-dom";
-import { useGlobalContext } from "../Context";
 import Loading from "../components/Loading";
 import CocktailItem from "../components/CocktailItem";
 import BackToTop from "../components/BackToTop";
+import { useSelector, useDispatch } from "react-redux";
+import { setIsLinkToDetail } from "../redux/SliceGeneral";
 
 function CocktailDetailPage() 
 {
   const url = 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=';
   const { id } = useParams();
-  const { favoriteIdsArray, setIsLinkToDetail } = useGlobalContext();
+  const { favoriteIdsArray } = useSelector((state) => state.page);
+  const reduxDispatch = useDispatch();
   const [detailItem, setDetailItem] = useState({});
+  
+  async function fetchDataDetail(idDetail)
+  {
+    try
+    {
+      const completeUrl = `${url}${idDetail}`;
+      const response = await fetch(completeUrl);
+      const dataJson = await response.json();
+      const newCocktailItem = parseData(dataJson);
+      setDetailItem(newCocktailItem);
+    }
+    catch(error)
+    {
+      console.log(error);
+    }
+  }
 
   function parseData(data)
   {
@@ -60,27 +78,11 @@ function CocktailDetailPage()
     const cocktailItem = newCocktailList[0];
     return cocktailItem;
   }
-  
-  async function fetchDataDetail(idDetail)
-  {
-    try
-    {
-      const completeUrl = `${url}${idDetail}`;
-      const response = await fetch(completeUrl);
-      const dataJson = await response.json();
-      const newCocktailItem = parseData(dataJson);
-      setDetailItem(newCocktailItem);
-    }
-    catch(error)
-    {
-      console.log(error);
-    }
-  }
 
   useEffect(() => 
   {
     fetchDataDetail(id);
-    setIsLinkToDetail(false);
+    reduxDispatch(setIsLinkToDetail(false));
   }, []);
   
   return (

@@ -1,13 +1,15 @@
 import NavLinks from "../components/NavLinks";
-import { useGlobalContext } from "../Context";
+import { useSelector, useDispatch } from "react-redux";
+import { setIsFavoriteAbout } from "../redux/SlicePage";
 
 function AboutPage() 
 {
-  const { isFavoriteAbout, setIsFavoriteAbout } = useGlobalContext();
+  const { isFavoriteAbout } = useSelector((state) => state.page);
+  const reduxDispatch = useDispatch();
 
   function toggleOnChangeHandler()
   {
-    setIsFavoriteAbout(!isFavoriteAbout);
+    reduxDispatch(setIsFavoriteAbout(!isFavoriteAbout));
   }
 
   return (
@@ -17,7 +19,7 @@ function AboutPage()
         <div className="title">About</div>
       </div>
       <div className={ isFavoriteAbout ? "page-bottom section-about section-about-favorite" : "page-bottom section-about" }>
-        <div className="section-subtitle">Cocktail-Buddy v1.8</div>
+        <div className="section-subtitle">Cocktail-Buddy v1.9</div>
         <div className="about-favorite">
           <div className="favorite-toggle">
             { !isFavoriteAbout && <div className="toggle-label">Not Favorite</div> }

@@ -1,19 +1,53 @@
 import { useEffect, useState } from "react";
 import NavLinks from "../components/NavLinks";
 import CocktailList from "../components/CocktailList";
+import BackToTop from "../components/BackToTop";
 //// global states
 //// state persists until browser refresh
-import { useGlobalContext } from "../Context";
-import BackToTop from "../components/BackToTop";
+import { useSelector, useDispatch } from "react-redux";
+import { setIsLinkToDetail } from "../redux/SliceGeneral";
+import { setRandomCocktailsArray } from "../redux/SlicePage";
 
 function HomePage() 
 {
   const url = 'https://www.thecocktaildb.com/api/json/v1/1/random.php';
-  const { randomCocktailsArray, setRandomCocktailsArray, setIsLinkToDetail, favoriteIdsArray } = useGlobalContext();
+  const { randomCocktailsArray, favoriteIdsArray } = useSelector((state) => state.page);
+  const reduxDispatch = useDispatch();
   const [randomButtonClickCount, setRandomButtonClickCount] = useState(0);
   //// number of cocktails shown on the page
   const numOfRandomCocktails = 4;
   //console.log('home page:', favoriteIdsArray);
+
+  //// FUNCTIONS
+
+  async function fetchDataRandom()
+  {
+    try
+    {
+      //// clone array
+      var newCocktailList = [...randomCocktailsArray];
+      var idsObject = {};
+      for (let i = 0; i < numOfRandomCocktails; i++)
+      {
+        var idLocal = '';
+        var dataJson = '';
+        do
+        {
+          const response = await fetch(url);
+          dataJson = await response.json();
+          idLocal = dataJson['drinks'][0]['idDrink'];
+        } while (idsObject[idLocal]);
+        idsObject[idLocal] = true;
+        newCocktailList = addDataToList(dataJson['drinks'][0], newCocktailList);
+      }
+      //console.log('home page: ', newCocktailList);
+      reduxDispatch(setRandomCocktailsArray(newCocktailList));
+    }
+    catch(error)
+    {
+      console.log('home page: ', error);
+    }
+  };
 
   function addDataToList(drinkItem, list)
   {
@@ -39,41 +73,16 @@ function HomePage()
     return list;
   }
 
-  async function fetchDataRandom()
-  {
-    try
-    {
-      //// clone array
-      var newCocktailList = [...randomCocktailsArray];
-      var idsObject = {};
-      for (let i = 0; i < numOfRandomCocktails; i++)
-      {
-        var idLocal = '';
-        var dataJson = '';
-        do
-        {
-          const response = await fetch(url);
-          dataJson = await response.json();
-          idLocal = dataJson['drinks'][0]['idDrink'];
-        } while (idsObject[idLocal]);
-        idsObject[idLocal] = true;
-        newCocktailList = addDataToList(dataJson['drinks'][0], newCocktailList);
-      }
-      //console.log('home page: ', newCocktailList);
-      setRandomCocktailsArray(newCocktailList);
-    }
-    catch(error)
-    {
-      console.log('home page: ', error);
-    }
-  };
-
+  //// EVENT HANDLER
+  
   function showOnClickHandler()
   {
-    setRandomCocktailsArray([]);
+    reduxDispatch(setRandomCocktailsArray([]));
     setRandomButtonClickCount(randomButtonClickCount + 1);
   }
 
+  //// START
+  
   //// triggers for each initial render or re-render
   //// missing dependency warning always exists when state variable or function is used within useEffect?
   useEffect(() => 
@@ -83,9 +92,11 @@ function HomePage()
     {
       fetchDataRandom();
     }
-    setIsLinkToDetail(true);
+    reduxDispatch(setIsLinkToDetail(true));
   }, [randomButtonClickCount]);
   
+  //// LAYOUT
+
   //// initial render
   //// re-render for any user interaction that updates an useState variable
   //// initial render for browser back or forward button

@@ -1,15 +1,40 @@
 import { useEffect } from "react";
-import { useGlobalContext } from "../Context";
 import NavLinks from "../components/NavLinks";
 import CocktailList from "../components/CocktailList";
 import BackToTop from "../components/BackToTop";
+import { useSelector, useDispatch } from "react-redux";
+import { setIsLinkToDetail, setIsIdsArrayChanged, setIsUpdateFavoriteCocktailsArray } from "../redux/SliceGeneral";
+import { setFavoriteCocktailsArray } from "../redux/SlicePage";
 
 function FavoritePage() 
 {
   const url = 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=';
-  const { setIsLinkToDetail, favoriteIdsArray, favoriteCocktailsArray, setFavoriteCocktailsArray, isIdsArrayChanged, setIsIdsArrayChanged, isUpdateFavoriteCocktailsArray, setIsUpdateFavoriteCocktailsArray } = useGlobalContext();
+  const { favoriteIdsArray, favoriteCocktailsArray } = useSelector((state) => state.page);
+  const { isIdsArrayChanged, isUpdateFavoriteCocktailsArray } = useSelector((state) => state.general);
+  const reduxDispatch = useDispatch();
   //console.log('favorite page: drink: ', favoriteCocktailsArray);
   //console.log('favorite page: id: ', favoriteIdsArray);
+  
+  async function fetchDataFavorite(idArray)
+  {
+    try
+    {
+      var newCocktailList = [];
+      for (const idItem of idArray)
+      {
+        const completeUrl = `${url}${idItem}`;
+        const response = await fetch(completeUrl);
+        const dataJson = await response.json();
+        newCocktailList = addDataToList(dataJson['drinks'][0], newCocktailList);
+      }
+      //console.log(newCocktailList);
+      reduxDispatch(setFavoriteCocktailsArray(newCocktailList));
+    }
+    catch(error)
+    {
+      console.log(error);
+    }
+  }
 
   function addDataToList(drinkItem, list)
   {
@@ -26,27 +51,6 @@ function FavoritePage()
     list.push(cocktailItem);
     return list;
   }
-
-  async function fetchDataFavorite(idArray)
-  {
-    try
-    {
-      var newCocktailList = [];
-      for (const idItem of idArray)
-      {
-        const completeUrl = `${url}${idItem}`;
-        const response = await fetch(completeUrl);
-        const dataJson = await response.json();
-        newCocktailList = addDataToList(dataJson['drinks'][0], newCocktailList);
-      }
-      //console.log(newCocktailList);
-      setFavoriteCocktailsArray(newCocktailList);
-    }
-    catch(error)
-    {
-      console.log(error);
-    }
-  }
   
   useEffect(() => 
   {
@@ -54,10 +58,10 @@ function FavoritePage()
     if (isUpdateFavoriteCocktailsArray || (favoriteIdsArray.length > 0 && isIdsArrayChanged))
     {
       fetchDataFavorite(favoriteIdsArray);
-      setIsIdsArrayChanged(false);
-      setIsUpdateFavoriteCocktailsArray(false);
+      reduxDispatch(setIsIdsArrayChanged(false));
+      reduxDispatch(setIsUpdateFavoriteCocktailsArray(false));
     }
-    setIsLinkToDetail(true);
+    reduxDispatch(setIsLinkToDetail(true));
   }, []);
   
   return (
