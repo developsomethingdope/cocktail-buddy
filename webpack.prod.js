@@ -11,7 +11,8 @@ module.exports = {
     filename: "[name]-[contenthash]-bundle.js",
     path: nodejsPath.resolve(__dirname, "build"),
 	assetModuleFilename: "files/[name]-[hash][ext]",
-	clean: true
+	clean: true,
+	publicPath: "/"
   },
   optimization: {
     //minimize: true,
